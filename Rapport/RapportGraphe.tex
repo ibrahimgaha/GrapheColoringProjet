@@ -1,0 +1,178 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{caption}
+\usepackage{setspace}
+
+\geometry{margin=2cm}
+\setstretch{1.2}
+
+\title{\textbf{Projet : Coloration des Graphes}\\[0.2cm]
+	Analyse, Visualisation et Comparaison d'Algorithmes}
+\author{Nom et Prénom}
+\date{\today}
+
+\begin{document}
+	
+	\maketitle
+	\tableofcontents
+	\newpage
+	
+	% ------------------------------------------------------------
+	\section{Introduction}
+	% ------------------------------------------------------------
+	
+	La coloration des graphes est un problème classique en informatique. Il s'agit d'attribuer des couleurs aux sommets ou aux arêtes d'un graphe tout en respectant certaines contraintes. La coloration est utilisée dans plusieurs domaines :
+	
+	\begin{itemize}
+		\item planification (emplois du temps),
+		\item allocation de ressources,
+		\item réseaux et communication,
+		\item compilation (coloration de registres).
+	\end{itemize}
+	
+	Le but est souvent de minimiser le nombre total de couleurs utilisées.
+	
+	% ------------------------------------------------------------
+	\section{Coloration des sommets}
+	% ------------------------------------------------------------
+	
+	\subsection{Principe}
+	On cherche à colorier les sommets d'un graphe de sorte que deux sommets adjacents ne possèdent pas la même couleur.
+	
+	\subsection{Exemples}
+	
+	\subsubsection{Graphe cycle}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{CycleGrapheTest.png}
+		\caption{Coloration des sommets d'un graphe cycle.}
+	\end{figure}
+	
+	\textbf{Commentaire :}  
+	Les cycles pairs utilisent 2 couleurs. Les cycles impairs nécessitent 3 couleurs.
+	
+	\subsubsection{Graphe aléatoire (Erdős–Rényi)}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{AleaGreedyTest.png}
+		\caption{Coloration d'un graphe aléatoire avec probabilité d'arêtes p = 0.3.}
+	\end{figure}
+	
+	\textbf{Commentaire :}  
+	Le nombre de couleurs dépend de la densité du graphe.
+	
+	\subsubsection{Graphe biparti}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{BipartieTest.png}
+		\caption{Coloration d'un graphe biparti complet.}
+	\end{figure}
+	
+	\textbf{Commentaire :}  
+	Un graphe biparti est toujours 2-coloriable.
+	
+	% ------------------------------------------------------------
+	\section{Coloration des arêtes}
+	% ------------------------------------------------------------
+	
+	\subsection{Principe}
+	Deux arêtes incidentes ne peuvent pas partager la même couleur.  
+	Une méthode courante consiste à utiliser le \textit{graphe des lignes}, où chaque arête devient un sommet.
+	
+	\subsection{Exemples}
+	
+	\subsubsection{Graphe cycle}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{CycleEdgeGreedy.png}
+		\caption{Coloration des arêtes d'un cycle.}
+	\end{figure}
+	
+	\subsubsection{Graphe aléatoire (Erdős–Rényi)}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{AleaEdgeGreedy.png}
+		\caption{Coloration des arêtes d'un graphe aléatoire.}
+	\end{figure}
+	
+	\subsubsection{Graphe biparti}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{BipartiEdgdeGreedy.png}
+		\caption{Coloration des arêtes d'un graphe biparti complet.}
+	\end{figure}
+	
+	% ------------------------------------------------------------
+	\section{Algorithmes de coloration}
+	% ------------------------------------------------------------
+	
+	\subsection{Greedy}
+	On parcourt les sommets dans un ordre fixe et on attribue la plus petite couleur disponible.
+	
+	\textbf{Avantages :}
+	\begin{itemize}
+		\item très simple,
+		\item temps d'exécution faible.
+	\end{itemize}
+	
+	\textbf{Inconvénients :}
+	\begin{itemize}
+		\item résultat dépend fortement de l'ordre des sommets.
+	\end{itemize}
+	
+	\subsection{Welsh–Powell}
+	Les sommets sont triés par degré décroissant avant d'appliquer Greedy.
+	
+	\textbf{Avantages :}
+	\begin{itemize}
+		\item améliore généralement le résultat,
+		\item efficace pour les graphes denses.
+	\end{itemize}
+	
+	\subsection{DSATUR}
+	À chaque étape, on choisit le sommet ayant la plus grande saturation (nombre de couleurs différentes dans son voisinage).
+	
+	\textbf{Avantages :}
+	\begin{itemize}
+		\item très bon résultat,
+		\item souvent optimal.
+	\end{itemize}
+	
+	\textbf{Inconvénients :} temps de calcul plus élevé.
+	
+	% ------------------------------------------------------------
+	\section{Comparaison des algorithmes}
+	% ------------------------------------------------------------
+	
+	\begin{table}[H]
+		\centering
+		\rowcolors{2}{gray!10}{white}
+		\begin{tabular}{|p{3.2cm}|p{3.2cm}|p{3cm}|p{3cm}|}
+			\hline
+			\rowcolor{gray!40}
+			\textbf{Algorithme} & \textbf{Critère de sélection} & \textbf{Complexité} & \textbf{Nombre de couleurs} \\
+			\hline
+			Greedy & Ordre fixe & Faible & Moyen à élevé \\
+			Welsh–Powell & Degré décroissant & Moyenne & Moyen \\
+			DSATUR & Saturation maximale & Plus élevée & Faible \\
+			\hline
+		\end{tabular}
+		\caption{Comparaison des trois algorithmes de coloration.}
+	\end{table}
+	
+	% ------------------------------------------------------------
+	\section{Conclusion}
+	% ------------------------------------------------------------
+	
+	Dans ce projet, nous avons étudié plusieurs méthodes de coloration et observé leur comportement sur différents types de graphes.  
+	DSATUR fournit généralement les meilleurs résultats, tandis que Greedy reste la méthode la plus rapide.  
+	La visualisation permet de mieux comprendre les étapes successives de coloration.
+	
+\end{document}
